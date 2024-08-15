@@ -21,7 +21,13 @@
     "paths": {
       "components/*": [
         "src/components/*"
-      ]
+      ],
+      "@tailus-ui/*": [
+        "/components/tailus-ui/*"
+      ],
+      "@lib/*": [
+        "/lib/*"
+      ],
     }
   },
   "include": [
