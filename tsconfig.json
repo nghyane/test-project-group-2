@@ -20,14 +20,15 @@
     "downlevelIteration": true,
     "paths": {
       "components/*": [
-        "src/components/*"
+        "./src/components/*"
       ],
-      "@tailus-ui/*": [
-        "/components/tailus-ui/*"
-      ],
+
       "@lib/*": [
-        "/lib/*"
+        "./src/lib/*"
       ],
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
   "include": [
