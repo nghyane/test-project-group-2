@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import path from "path";
-import webpack, {Configuration} from "webpack";
+import webpack, { Configuration } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import ESLintPlugin from "eslint-webpack-plugin";
-import {TsconfigPathsPlugin} from "tsconfig-paths-webpack-plugin";
+import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin";
 
 const webpackConfig = (env): Configuration => ({
     entry: "./src/index.tsx",
-    ...(env.production || !env.development ? {} : {devtool: "eval-source-map"}),
+    ...(env.production || !env.development ? {} : { devtool: "eval-source-map" }),
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
         plugins: [new TsconfigPathsPlugin()]
@@ -38,7 +39,7 @@ const webpackConfig = (env): Configuration => ({
             "process.env.VERSION": JSON.stringify(require("./package.json").version)
         }),
         new ForkTsCheckerWebpackPlugin(),
-        new ESLintPlugin({files: "./src/**/*.{ts,tsx,js,jsx}"})
+        new ESLintPlugin({ files: "./src/**/*.{ts,tsx,js,jsx}" })
     ]
 });
 
