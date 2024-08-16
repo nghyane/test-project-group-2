@@ -11,7 +11,7 @@ import HelloWorld from "components/HelloWorld";
 const BrowserRouter = createBrowserRouter([
     {
         path: "/",
-        element: <HelloWorld />,
+        Component: HelloWorld,
     }
 ]);
 
