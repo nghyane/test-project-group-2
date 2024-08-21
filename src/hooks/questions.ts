@@ -19,6 +19,7 @@ export const useQuestions = create<State>((set) => ({
     fetchQuestions: async () => {
         const response = await fetch('https://6665b6afd122c2868e418159.mockapi.io/question')
         const questions = await response.json()
+        console.log(questions)
         set({ questions })
     },
     createQuestion: async (question) => {
@@ -32,7 +33,7 @@ export const useQuestions = create<State>((set) => ({
         }))
     },
     deleteQuestion: async (id) => {
-        await fetch(`https://6665b6afd122c2868e418159.mockapi.io/question/${id}`, {
+        await fetch(`https://api.example.com/questions/${id}`, {
             method: 'DELETE'
         })
         set((state) => ({
