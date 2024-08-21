@@ -14,7 +14,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import Header from "@/components/layout/Header"
 import Footer from "components/layout/Footer";
 
-import { useQuestions } from "@/hooks/questions";
+import { useQuestions } from "@/hooks/useQuestions";
 
 const Home: React.FC = () => {
     const defaultQuestions = {
@@ -53,6 +53,10 @@ const Home: React.FC = () => {
 
     const createQuestion = useQuestions(
         (state) => state.createQuestion
+    );
+
+    const deleteQuestion = useQuestions(
+        (state) => state.deleteQuestion
     );
 
 
@@ -150,34 +154,7 @@ const Home: React.FC = () => {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            <TableRow>
-                                                <TableCell>
-                                                    <Link to="/q/1" className="font-medium hover:underline">
-                                                        How to set up a React project?
-                                                    </Link>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Avatar className="w-6 h-6 border">
-                                                            <AvatarImage src="/placeholder-user.jpg" alt="Image" />
-                                                            <AvatarFallback>JD</AvatarFallback>
-                                                        </Avatar>
-                                                        <span>John Doe</span>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <FilePenIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Answer</span>
-                                                        </Button>
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <TrashIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Delete</span>
-                                                        </Button>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
+
                                             {questions.map((q) => (
                                                 <React.Fragment key={q.id}>
                                                     <TableRow>
@@ -207,7 +184,7 @@ const Home: React.FC = () => {
                                                                     <FilePenIcon className="w-4 h-4" />
                                                                     <span className="sr-only">Answer</span>
                                                                 </Button>
-                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full" onClick={() => deleteQuestion(q.id)}>
                                                                     <TrashIcon className="w-4 h-4" />
                                                                     <span className="sr-only">Delete</span>
                                                                 </Button>
