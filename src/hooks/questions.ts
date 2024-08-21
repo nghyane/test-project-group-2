@@ -16,7 +16,7 @@ type State = {
 export const useQuestions = create<State>((set) => ({
     questions: [],
     fetchQuestions: async () => {
-        const response = await fetch('https://api.example.com/questions')
+        const response = await fetch('https://6665b6afd122c2868e418159.mockapi.io/question')
         const questions = await response.json()
         set({ questions })
     },
