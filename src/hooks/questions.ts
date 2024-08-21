@@ -9,7 +9,8 @@ type Question = {
 type State = {
     questions: Question[]
     fetchQuestions: () => void
-    deleteQuestion: (id: number) => void
+    deleteQuestion: (id: number) => void,
+    createQuestion: (question: Question) => void
 }
 
 export const useQuestions = create<State>((set) => ({
@@ -18,6 +19,16 @@ export const useQuestions = create<State>((set) => ({
         const response = await fetch('https://api.example.com/questions')
         const questions = await response.json()
         set({ questions })
+    },
+    createQuestion: async (question) => {
+        const response = await fetch('https://api.example.com/questions', {
+            method: 'POST',
+            body: JSON.stringify(question)
+        })
+        const newQuestion = await response.json()
+        set((state) => ({
+            questions: [...state.questions, newQuestion]
+        }))
     },
     deleteQuestion: async (id) => {
         await fetch(`https://api.example.com/questions/${id}`, {

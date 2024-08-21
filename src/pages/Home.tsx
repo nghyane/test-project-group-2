@@ -14,189 +14,209 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import Header from "@/components/layout/Header"
 import Footer from "components/layout/Footer";
 
+import { useQuestions } from "@/hooks/questions";
 
-const Home: React.FC = () => (
-    <div className="flex flex-col min-h-screen">
-        <Header />
+const Home: React.FC = () => {
+    const questions = useQuestions(
+        (state) => state.questions
+    );
 
-        <main className="flex-1 py-8 px-6">
-            <Tabs defaultValue="intern">
-                <TabsList className="mb-4">
-                    <TabsTrigger value="intern">Intern</TabsTrigger>
-                    <TabsTrigger value="admin">Admin</TabsTrigger>
-                </TabsList>
+    const fetchQuestions = useQuestions(
+        (state) => state.fetchQuestions
+    );
 
-                <TabsContent value="intern">
-                    <div className="grid gap-4">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Ask a Question</CardTitle>
-                                <CardDescription>Share your questions and get answers from our team.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <form>
-                                    <div className="space-y-2">
-                                        <div>
-                                            <Label htmlFor="title">Title</Label>
-                                            <Input id="title" placeholder="Enter your question" />
+    const createQuestion = useQuestions(
+        (state) => state.createQuestion
+    );
+    
+
+    React.useEffect(() => {
+        fetchQuestions();
+    }, [fetchQuestions]);
+
+
+    return (
+        <div className="flex flex-col min-h-screen">
+            <Header />
+
+            <main className="flex-1 py-8 px-6">
+                <Tabs defaultValue="intern">
+                    <TabsList className="mb-4">
+                        <TabsTrigger value="intern">Intern</TabsTrigger>
+                        <TabsTrigger value="admin">Admin</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="intern">
+                        <div className="grid gap-4">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Ask a Question</CardTitle>
+                                    <CardDescription>Share your questions and get answers from our team.</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <form>
+                                        <div className="space-y-2">
+                                            <div>
+                                                <Label htmlFor="title">Title</Label>
+                                                <Input id="title" placeholder="Enter your question" />
+                                            </div>
+                                            <div>
+                                                <Label htmlFor="description">Description</Label>
+                                                <Textarea id="description" placeholder="Provide more details about your question" rows={3} />
+                                            </div>
                                         </div>
-                                        <div>
-                                            <Label htmlFor="description">Description</Label>
-                                            <Textarea id="description" placeholder="Provide more details about your question" rows={3} />
-                                        </div>
-                                    </div>
-                                    <Button type="submit" className="mt-4">
-                                        Ask Question
-                                    </Button>
-                                </form>
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>My Questions</CardTitle>
-                                <CardDescription>View and manage the questions you've asked.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Title</TableHead>
-                                            <TableHead>Actions</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell>
-                                                <Link to="/q/1" className="font-medium hover:underline">
-                                                    How to set up a React project?
-                                                </Link>
-                                            </TableCell>
-                                           
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                        <FilePenIcon className="w-4 h-4" />
-                                                        <span className="sr-only">Edit</span>
-                                                    </Button>
-                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                        <TrashIcon className="w-4 h-4" />
-                                                        <span className="sr-only">Delete</span>
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>
-                                                <Link to="/q/1" className="font-medium hover:underline">
-                                                    What is the difference between useState and useEffect?
-                                                </Link>
-                                            </TableCell>
-                                            
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                        <FilePenIcon className="w-4 h-4" />
-                                                        <span className="sr-only">Edit</span>
-                                                    </Button>
-                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                        <TrashIcon className="w-4 h-4" />
-                                                        <span className="sr-only">Delete</span>
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </CardContent>
-                        </Card>
-                    </div>
-                </TabsContent>
+                                        <Button type="submit" className="mt-4">
+                                            Ask Question
+                                        </Button>
+                                    </form>
+                                </CardContent>
+                            </Card>
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>My Questions</CardTitle>
+                                    <CardDescription>View and manage the questions you've asked.</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Title</TableHead>
+                                                <TableHead>Actions</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>
+                                                    <Link to="/q/1" className="font-medium hover:underline">
+                                                        How to set up a React project?
+                                                    </Link>
+                                                </TableCell>
 
-                <TabsContent value="admin">
-                    <div className="grid gap-4">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Unanswered Questions</CardTitle>
-                                <CardDescription>Review and respond to questions from interns.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Title</TableHead>
-                                            <TableHead>Intern</TableHead>
-                                            <TableHead>Actions</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell>
-                                                <Link to="/q/1" className="font-medium hover:underline">
-                                                    How to set up a React project?
-                                                </Link>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Avatar className="w-6 h-6 border">
-                                                        <AvatarImage src="/placeholder-user.jpg" alt="Image" />
-                                                        <AvatarFallback>JD</AvatarFallback>
-                                                    </Avatar>
-                                                    <span>John Doe</span>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                        <FilePenIcon className="w-4 h-4" />
-                                                        <span className="sr-only">Answer</span>
-                                                    </Button>
-                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                        <TrashIcon className="w-4 h-4" />
-                                                        <span className="sr-only">Delete</span>
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>
-                                                <Link to="/q/1" className="font-medium hover:underline">
-                                                    What is the difference between useState and useEffect?
-                                                </Link>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Avatar className="w-6 h-6 border">
-                                                        <AvatarImage src="/placeholder-user.jpg" alt="Image" />
-                                                        <AvatarFallback>JD</AvatarFallback>
-                                                    </Avatar>
-                                                    <span>Jane Doe</span>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                        <FilePenIcon className="w-4 h-4" />
-                                                        <span className="sr-only">Answer</span>
-                                                    </Button>
-                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                        <TrashIcon className="w-4 h-4" />
-                                                        <span className="sr-only">Delete</span>
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </CardContent>
-                        </Card>
-                    </div>
-                </TabsContent>
-            </Tabs>
-        </main>
-        <Footer />
-    </div>
-)
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                            <FilePenIcon className="w-4 h-4" />
+                                                            <span className="sr-only">Edit</span>
+                                                        </Button>
+                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                            <TrashIcon className="w-4 h-4" />
+                                                            <span className="sr-only">Delete</span>
+                                                        </Button>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>
+                                                    <Link to="/q/1" className="font-medium hover:underline">
+                                                        What is the difference between useState and useEffect?
+                                                    </Link>
+                                                </TableCell>
 
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                            <FilePenIcon className="w-4 h-4" />
+                                                            <span className="sr-only">Edit</span>
+                                                        </Button>
+                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                            <TrashIcon className="w-4 h-4" />
+                                                            <span className="sr-only">Delete</span>
+                                                        </Button>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </TabsContent>
+
+                    <TabsContent value="admin">
+                        <div className="grid gap-4">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Unanswered Questions</CardTitle>
+                                    <CardDescription>Review and respond to questions from interns.</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Title</TableHead>
+                                                <TableHead>Intern</TableHead>
+                                                <TableHead>Actions</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>
+                                                    <Link to="/q/1" className="font-medium hover:underline">
+                                                        How to set up a React project?
+                                                    </Link>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <Avatar className="w-6 h-6 border">
+                                                            <AvatarImage src="/placeholder-user.jpg" alt="Image" />
+                                                            <AvatarFallback>JD</AvatarFallback>
+                                                        </Avatar>
+                                                        <span>John Doe</span>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                            <FilePenIcon className="w-4 h-4" />
+                                                            <span className="sr-only">Answer</span>
+                                                        </Button>
+                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                            <TrashIcon className="w-4 h-4" />
+                                                            <span className="sr-only">Delete</span>
+                                                        </Button>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>
+                                                    <Link to="/q/1" className="font-medium hover:underline">
+                                                        What is the difference between useState and useEffect?
+                                                    </Link>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <Avatar className="w-6 h-6 border">
+                                                            <AvatarImage src="/placeholder-user.jpg" alt="Image" />
+                                                            <AvatarFallback>JD</AvatarFallback>
+                                                        </Avatar>
+                                                        <span>Jane Doe</span>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                            <FilePenIcon className="w-4 h-4" />
+                                                            <span className="sr-only">Answer</span>
+                                                        </Button>
+                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                            <TrashIcon className="w-4 h-4" />
+                                                            <span className="sr-only">Delete</span>
+                                                        </Button>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </TabsContent>
+                </Tabs>
+            </main>
+            <Footer />
+        </div>
+    )
+}
 
 
 
