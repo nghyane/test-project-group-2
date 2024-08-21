@@ -29,7 +29,10 @@ const Home: React.FC = () => {
         (state) => state.createQuestion
     );
 
-
+    const deleteQuestion = useQuestions(
+        (state) => state.deleteQuestion
+    );
+    
     React.useEffect(() => {
         fetchQuestions()
 
@@ -151,7 +154,7 @@ const Home: React.FC = () => {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            <TableRow>
+                                            {/* <TableRow>
                                                 <TableCell>
                                                     <Link to="/q/1" className="font-medium hover:underline">
                                                         How to set up a React project?
@@ -178,7 +181,7 @@ const Home: React.FC = () => {
                                                         </Button>
                                                     </div>
                                                 </TableCell>
-                                            </TableRow>
+                                            </TableRow> */}
                                             {questions.map((question) => (
                                                 <React.Fragment key={question.id}>
                                                     <TableRow>
@@ -202,7 +205,9 @@ const Home: React.FC = () => {
                                                                     <FilePenIcon className="w-4 h-4" />
                                                                     <span className="sr-only">Answer</span>
                                                                 </Button>
-                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                                <Button
+                                                                onClick={() => deleteQuestion(question.id)}
+                                                                variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
                                                                     <TrashIcon className="w-4 h-4" />
                                                                     <span className="sr-only">Delete</span>
                                                                 </Button>
