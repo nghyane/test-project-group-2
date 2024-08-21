@@ -2,7 +2,6 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
@@ -13,49 +12,21 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
+import Header from "@/components/layout/Header"
+import Footer from "components/layout/Footer";
 
-const HelloWorld: React.FC = () => (
+
+const Home: React.FC = () => (
     <div className="flex flex-col min-h-screen">
-        <header className="bg-primary text-primary-foreground py-4 px-6 flex items-center justify-between">
-            <Link to="#" className="flex items-center gap-2 font-bold text-xl">
-                <CodeIcon className="w-6 h-6" />
-                Intern Q&A
-            </Link>
-            <nav className="flex items-center gap-4">
-                <Link to="#" className="text-sm font-medium hover:underline underline-offset-4">
-                    Intern
-                </Link>
-                <Link to="#" className="text-sm font-medium hover:underline underline-offset-4">
-                    Admin
-                </Link>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="rounded-full">
-                            <img
-                                src="https://avatar.iran.liara.run/public/1"
-                                width={32}
-                                height={32}
-                                alt="Avatar"
-                                className="rounded-full"
-                                style={{ aspectRatio: "32/32", objectFit: "cover" }}
-                            />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
-                        <DropdownMenuItem>Logout</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </nav>
-        </header>
+        <Header />
+
         <main className="flex-1 py-8 px-6">
             <Tabs defaultValue="intern">
                 <TabsList className="mb-4">
                     <TabsTrigger value="intern">Intern</TabsTrigger>
                     <TabsTrigger value="admin">Admin</TabsTrigger>
                 </TabsList>
+
                 <TabsContent value="intern">
                     <div className="grid gap-4">
                         <Card>
@@ -98,7 +69,7 @@ const HelloWorld: React.FC = () => (
                                     <TableBody>
                                         <TableRow>
                                             <TableCell>
-                                                <Link to="#" className="font-medium hover:underline">
+                                                <Link to="/q/1" className="font-medium hover:underline">
                                                     How to set up a React project?
                                                 </Link>
                                             </TableCell>
@@ -120,7 +91,7 @@ const HelloWorld: React.FC = () => (
                                         </TableRow>
                                         <TableRow>
                                             <TableCell>
-                                                <Link to="#" className="font-medium hover:underline">
+                                                <Link to="/q/1" className="font-medium hover:underline">
                                                     What is the difference between useState and useEffect?
                                                 </Link>
                                             </TableCell>
@@ -146,6 +117,7 @@ const HelloWorld: React.FC = () => (
                         </Card>
                     </div>
                 </TabsContent>
+
                 <TabsContent value="admin">
                     <div className="grid gap-4">
                         <Card>
@@ -165,7 +137,7 @@ const HelloWorld: React.FC = () => (
                                     <TableBody>
                                         <TableRow>
                                             <TableCell>
-                                                <Link to="#" className="font-medium hover:underline">
+                                                <Link to="/q/1" className="font-medium hover:underline">
                                                     How to set up a React project?
                                                 </Link>
                                             </TableCell>
@@ -193,7 +165,7 @@ const HelloWorld: React.FC = () => (
                                         </TableRow>
                                         <TableRow>
                                             <TableCell>
-                                                <Link to="#" className="font-medium hover:underline">
+                                                <Link to="/q/1" className="font-medium hover:underline">
                                                     What is the difference between useState and useEffect?
                                                 </Link>
                                             </TableCell>
@@ -227,43 +199,11 @@ const HelloWorld: React.FC = () => (
                 </TabsContent>
             </Tabs>
         </main>
-        <footer className="bg-muted text-muted-foreground py-4 px-6 flex items-center justify-between">
-            <p className="text-sm">© 2024 Intern Q&A. All rights reserved.</p>
-            <div className="flex items-center gap-4">
-                <Link to="#" className="text-sm hover:underline underline-offset-4">
-                    Contact
-                </Link>
-                <Link to="#" className="text-sm hover:underline underline-offset-4">
-                    Privacy
-                </Link>
-                <Link to="#" className="text-sm hover:underline underline-offset-4">
-                    Terms
-                </Link>
-            </div>
-        </footer>
+        <Footer />
     </div>
 )
 
 
-function CodeIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <polyline points="16 18 22 12 16 6" />
-            <polyline points="8 6 2 12 8 18" />
-        </svg>
-    )
-}
 
 
 function FilePenIcon(props) {
@@ -309,4 +249,4 @@ function TrashIcon(props) {
     )
 }
 
-export default HelloWorld;
+export default Home;

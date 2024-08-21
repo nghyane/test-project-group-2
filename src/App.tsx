@@ -5,13 +5,17 @@ import {
 } from "react-router-dom";
 import "src/css/App.css";
 
-import HelloWorld from "components/HelloWorld";
-
+import Home from "./pages/Home";
+import Question from "./pages/Question";
 
 const BrowserRouter = createBrowserRouter([
     {
         path: "/",
-        Component: HelloWorld,
+        Component: Home,
+    },
+    {
+        path: "/q/:id",
+        Component: Question,
     }
 ]);
 
