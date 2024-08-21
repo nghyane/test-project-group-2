@@ -17,6 +17,32 @@ import Footer from "components/layout/Footer";
 import { useQuestions } from "@/hooks/questions";
 
 const Home: React.FC = () => {
+    const defaultQuestions = {
+        title: "",
+        description: "",
+        username: "Anonymous"
+    }
+    
+    const [question, setQuestion] = React.useState(defaultQuestions);
+
+    const handleSubmission = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        createQuestion({
+            ...question,
+        });
+
+        setQuestion(defaultQuestions);
+    }
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setQuestion({
+            ...question,
+            [event.target.name]: event.target.value
+        });
+    };
+
+
+
     const questions = useQuestions(
         (state) => state.questions
     );
@@ -27,6 +53,10 @@ const Home: React.FC = () => {
 
     const createQuestion = useQuestions(
         (state) => state.createQuestion
+    );
+
+    const deleteQuestion = useQuestions(
+        (state) => state.deleteQuestion
     );
 
 
@@ -56,15 +86,15 @@ const Home: React.FC = () => {
                                     <CardDescription>Share your questions and get answers from our team.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <form>
+                                    <form onSubmit={handleSubmission}>
                                         <div className="space-y-2">
                                             <div>
                                                 <Label htmlFor="title">Title</Label>
-                                                <Input id="title" placeholder="Enter your question" />
+                                                <Input id="title" placeholder="Enter your question" defaultValue={question.title} onChange={handleChange} name="title" />
                                             </div>
                                             <div>
                                                 <Label htmlFor="description">Description</Label>
-                                                <Textarea id="description" placeholder="Provide more details about your question" rows={3} />
+                                                <Textarea id="description" placeholder="Provide more details about your question" rows={3} defaultValue={question.description} onChange={handleChange} name="description" />
                                             </div>
                                         </div>
                                         <Button type="submit" className="mt-4">
@@ -82,51 +112,24 @@ const Home: React.FC = () => {
                                     <Table>
                                         <TableHeader>
                                             <TableRow>
-                                                <TableHead>Title</TableHead>
-                                                <TableHead>Actions</TableHead>
+                                                <TableHead>Questions</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            <TableRow>
-                                                <TableCell>
-                                                    <Link to="/q/1" className="font-medium hover:underline">
-                                                        How to set up a React project?
-                                                    </Link>
-                                                </TableCell>
+                                            {questions.map((q) => (
+                                                <React.Fragment key={q.id}>
+                                                    <TableRow>
+                                                        <TableCell>
+                                                            <Link to={
+                                                                `/q/${q.id}`
+                                                            } className="font-medium hover:underline">
+                                                                {q.title}
+                                                            </Link>
+                                                        </TableCell>
 
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <FilePenIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Edit</span>
-                                                        </Button>
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <TrashIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Delete</span>
-                                                        </Button>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell>
-                                                    <Link to="/q/1" className="font-medium hover:underline">
-                                                        What is the difference between useState and useEffect?
-                                                    </Link>
-                                                </TableCell>
-
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <FilePenIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Edit</span>
-                                                        </Button>
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <TrashIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Delete</span>
-                                                        </Button>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
+                                                    </TableRow>
+                                                </React.Fragment>
+                                            ))}
                                         </TableBody>
                                     </Table>
                                 </CardContent>
@@ -145,64 +148,49 @@ const Home: React.FC = () => {
                                     <Table>
                                         <TableHeader>
                                             <TableRow>
-                                                <TableHead>Title</TableHead>
+                                                <TableHead>Questions</TableHead>
                                                 <TableHead>Intern</TableHead>
                                                 <TableHead>Actions</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            <TableRow>
-                                                <TableCell>
-                                                    <Link to="/q/1" className="font-medium hover:underline">
-                                                        How to set up a React project?
-                                                    </Link>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Avatar className="w-6 h-6 border">
-                                                            <AvatarImage src="/placeholder-user.jpg" alt="Image" />
-                                                            <AvatarFallback>JD</AvatarFallback>
-                                                        </Avatar>
-                                                        <span>John Doe</span>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <FilePenIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Answer</span>
-                                                        </Button>
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <TrashIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Delete</span>
-                                                        </Button>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                            {questions.map((question) => (
-                                                <React.Fragment key={question.id}>
+                                            {questions.map((q) => (
+                                                <React.Fragment key={q.id}>
                                                     <TableRow>
                                                         <TableCell>
-                                                            <Link to="/q/1" className="font-medium hover:underline">
-                                                                {question.title}
+                                                            <Link to={
+                                                                `/q/${q.id}`
+                                                            } className="font-medium hover:underline">
+                                                                {q.title}
                                                             </Link>
                                                         </TableCell>
                                                         <TableCell>
                                                             <div className="flex items-center gap-2">
                                                                 <Avatar className="w-6 h-6 border">
-                                                                    <AvatarImage src="/placeholder-user.jpg" alt="Image" />
-                                                                    <AvatarFallback>JD</AvatarFallback>
+                                                                    <AvatarImage src="https://avatar.iran.liara.run/public/1" alt="Image" />
+                                                                    <AvatarFallback>
+                                                                        <span>{q.username?.charAt(0).toUpperCase()}</span>
+                                                                    </AvatarFallback>
                                                                 </Avatar>
-                                                                <span>John Doe</span>
+                                                                <span>
+                                                                    {q.username || "Anonymous"}
+                                                                </span>
                                                             </div>
                                                         </TableCell>
                                                         <TableCell>
                                                             <div className="flex items-center gap-2">
-                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                                    <FilePenIcon className="w-4 h-4" />
-                                                                    <span className="sr-only">Answer</span>
-                                                                </Button>
-                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                                <Link to={
+                                                                    `/q/${q.id}`
+                                                                } className="font-medium hover:underline">
+                                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                                        <FilePenIcon className="w-4 h-4" />
+                                                                        <span className="sr-only">Reply</span>
+                                                                    </Button>
+                                                                </Link>
+
+
+
+                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full" onClick={() => deleteQuestion(q.id)}>
                                                                     <TrashIcon className="w-4 h-4" />
                                                                     <span className="sr-only">Delete</span>
                                                                 </Button>

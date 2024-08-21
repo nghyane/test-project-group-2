@@ -1,9 +1,10 @@
 import { create } from 'zustand'
 
 type Question = {
-    id: number
+    id?: number
     title: string
     description: string
+    username?: string
 }
 
 type State = {
@@ -21,7 +22,7 @@ export const useQuestions = create<State>((set) => ({
         set({ questions })
     },
     createQuestion: async (question) => {
-        const response = await fetch('https://api.example.com/questions', {
+        const response = await fetch('https://6665b6afd122c2868e418159.mockapi.io/question', {
             method: 'POST',
             body: JSON.stringify(question)
         })
@@ -31,7 +32,7 @@ export const useQuestions = create<State>((set) => ({
         }))
     },
     deleteQuestion: async (id) => {
-        await fetch(`https://api.example.com/questions/${id}`, {
+        await fetch(`https://6665b6afd122c2868e418159.mockapi.io/question/${id}`, {
             method: 'DELETE'
         })
         set((state) => ({

@@ -13,12 +13,6 @@ const Header = () => {
                     Amazing Tech
                 </Link>
                 <nav className="flex items-center gap-4">
-                    <Link to="#" className="text-sm font-medium hover:underline underline-offset-4">
-                        Intern
-                    </Link>
-                    <Link to="#" className="text-sm font-medium hover:underline underline-offset-4">
-                        Admin
-                    </Link>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="rounded-full">
