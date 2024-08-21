@@ -20,7 +20,7 @@ const Question: React.FC = () => {
     const [questionDescription, setQuestionDescription] = useState<string | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
     const [newComment, setNewComment] = useState<string>("");
-    const [newUser, setNewUser] = useState<string>(""); // Thêm state cho tên người dùng mới
+    const [newUser, setNewUser] = useState<string>("");
     const [editCommentId, setEditCommentId] = useState<string | null>(null);
     const [editCommentText, setEditCommentText] = useState<string>("");
 
