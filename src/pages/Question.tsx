@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-const API_URL = "https://6665b6afd122c2868e418159.mockapi.io/admin";
+const API_URL = "https://6665b6afd122c2868e418159.mockapi.io/reply";
 
 interface Comment {
     comment: string;
@@ -30,7 +30,7 @@ const Question: React.FC = () => {
     }, [paramQuestionId]);
 
     const fetchQuestion = async (id: string) => {
-        const response = await fetch(`https://6665b6afd122c2868e418159.mockapi.io/test`);
+        const response = await fetch(`https://6665b6afd122c2868e418159.mockapi.io/question`);
         const data = await response.json();
         const question = data.find((q: { id: string }) => q.id === id);
         setQuestionTitle(question ? question.title : "Loading question...");
