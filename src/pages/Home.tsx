@@ -28,11 +28,13 @@ const Home: React.FC = () => {
     const createQuestion = useQuestions(
         (state) => state.createQuestion
     );
-    
+
 
     React.useEffect(() => {
-        fetchQuestions();
+        fetchQuestions()
+
     }, [fetchQuestions]);
+
 
 
     return (
@@ -177,34 +179,38 @@ const Home: React.FC = () => {
                                                     </div>
                                                 </TableCell>
                                             </TableRow>
-                                            <TableRow>
-                                                <TableCell>
-                                                    <Link to="/q/1" className="font-medium hover:underline">
-                                                        What is the difference between useState and useEffect?
-                                                    </Link>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Avatar className="w-6 h-6 border">
-                                                            <AvatarImage src="/placeholder-user.jpg" alt="Image" />
-                                                            <AvatarFallback>JD</AvatarFallback>
-                                                        </Avatar>
-                                                        <span>Jane Doe</span>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <FilePenIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Answer</span>
-                                                        </Button>
-                                                        <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                            <TrashIcon className="w-4 h-4" />
-                                                            <span className="sr-only">Delete</span>
-                                                        </Button>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
+                                            {questions.map((question) => (
+                                                <React.Fragment key={question.id}>
+                                                    <TableRow>
+                                                        <TableCell>
+                                                            <Link to="/q/1" className="font-medium hover:underline">
+                                                                {question.title}
+                                                            </Link>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <div className="flex items-center gap-2">
+                                                                <Avatar className="w-6 h-6 border">
+                                                                    <AvatarImage src="/placeholder-user.jpg" alt="Image" />
+                                                                    <AvatarFallback>JD</AvatarFallback>
+                                                                </Avatar>
+                                                                <span>John Doe</span>
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <div className="flex items-center gap-2">
+                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                                    <FilePenIcon className="w-4 h-4" />
+                                                                    <span className="sr-only">Answer</span>
+                                                                </Button>
+                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                                    <TrashIcon className="w-4 h-4" />
+                                                                    <span className="sr-only">Delete</span>
+                                                                </Button>
+                                                            </div>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </React.Fragment>
+                                            ))}
                                         </TableBody>
                                     </Table>
                                 </CardContent>
