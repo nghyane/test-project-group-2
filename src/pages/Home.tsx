@@ -94,7 +94,7 @@ const Home: React.FC = () => {
                                             </div>
                                         </div>
                                         <Button type="submit" className="mt-4">
-                                            Ask Question
+                                            Ask Questions
                                         </Button>
                                     </form>
                                 </CardContent>
