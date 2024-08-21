@@ -1,55 +1,29 @@
-import React, { useState, useEffect } from "react";
+// Question.js
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import useFetchQuestion from '../hooks/useFetchQuestion';
+import useComments from '../hooks/useComments';
 
-const API_URL = "https://6665b6afd122c2868e418159.mockapi.io/reply";
 
-interface Comment {
-    comment: string;
-    name: string;
-    questionId: string;
-    id: string;
-}
+const Question = () => {
+    const { id: paramQuestionId } = useParams();
+    const { questionTitle, questionDescription } = useFetchQuestion(paramQuestionId);
+    const { comments, addComment, updateComment, deleteComment } = useComments(paramQuestionId);
 
-const Question: React.FC = () => {
-    const { id: paramQuestionId } = useParams<{ id: string }>();
-    const [questionTitle, setQuestionTitle] = useState<string | null>(null);
-    const [questionDescription, setQuestionDescription] = useState<string | null>(null);
-    const [comments, setComments] = useState<Comment[]>([]);
-    const [newComment, setNewComment] = useState<string>("");
-    const [newUser, setNewUser] = useState<string>("");
-    const [editCommentId, setEditCommentId] = useState<string | null>(null);
-    const [editCommentText, setEditCommentText] = useState<string>("");
+    const [newComment, setNewComment] = useState("");
+    const [newUser, setNewUser] = useState("");
+    const [editCommentId, setEditCommentId] = useState(null);
+    const [editCommentText, setEditCommentText] = useState("");
 
-    useEffect(() => {
-        fetchQuestion(paramQuestionId);
-        fetchComments(paramQuestionId);
-    }, [paramQuestionId]);
-
-    const fetchQuestion = async (id: string) => {
-        const response = await fetch(`https://6665b6afd122c2868e418159.mockapi.io/question`);
-        const data = await response.json();
-        const question = data.find((q: { id: string }) => q.id === id);
-        setQuestionTitle(question ? question.title : "Loading question...");
-        setQuestionDescription(question ? question.description : "Loading description...");
-    };
-
-    const fetchComments = async (questionId: string) => {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-        setComments(data.filter((comment: Comment) => comment.questionId === questionId));
-    };
-
-    const handleCommentSubmit = async () => {
+    const handleCommentSubmit = () => {
         if (newComment.trim() === "" || newUser.trim() === "") {
-            alert("Comment or Name empty")
+            alert("Comment or Name empty");
             return;
-
         }
-
 
         const newCommentObj = {
             comment: newComment,
@@ -58,50 +32,31 @@ const Question: React.FC = () => {
             id: Date.now().toString(),
         };
 
-        await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newCommentObj),
-        });
-
+        addComment(newCommentObj);
         setNewComment("");
         setNewUser("");
-        fetchComments(paramQuestionId);
     };
 
-    const handleEditComment = (comment: Comment) => {
+    const handleEditComment = (comment) => {
         setEditCommentId(comment.id);
         setEditCommentText(comment.comment);
     };
 
-    const handleUpdateComment = async () => {
+    const handleUpdateComment = () => {
         if (editCommentText.trim() === "") return;
 
-        await fetch(`${API_URL}/${editCommentId}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ comment: editCommentText }),
-        });
-
+        updateComment(editCommentId, editCommentText);
         setEditCommentId(null);
         setEditCommentText("");
-        fetchComments(paramQuestionId);
     };
 
-    const handleDeleteComment = async (commentId: string) => {
+    const handleDeleteComment = (commentId) => {
         const confirmed = window.confirm("Are you sure you want to delete this comment?");
         if (!confirmed) return;
 
-        await fetch(`${API_URL}/${commentId}`, {
-            method: "DELETE",
-        });
-
-        fetchComments(paramQuestionId);
+        deleteComment(commentId);
     };
+
     return (
         <div className="flex flex-col min-h-screen bg-gray-100">
             <Header />
@@ -146,7 +101,6 @@ const Question: React.FC = () => {
                                                 className="bg-gray-200 text-red-600 text-sm px-3 py-1 rounded-md">
                                                 Delete
                                             </Button>
-
                                         </div>
                                     </>
                                 )}
