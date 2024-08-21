@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
-
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 const API_URL = "https://6665b6afd122c2868e418159.mockapi.io/admin";
 
@@ -19,8 +17,10 @@ interface Comment {
 const Question: React.FC = () => {
     const { id: paramQuestionId } = useParams<{ id: string }>();
     const [questionTitle, setQuestionTitle] = useState<string | null>(null);
+    const [questionDescription, setQuestionDescription] = useState<string | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
     const [newComment, setNewComment] = useState<string>("");
+    const [newUser, setNewUser] = useState<string>(""); // Thêm state cho tên người dùng mới
     const [editCommentId, setEditCommentId] = useState<string | null>(null);
     const [editCommentText, setEditCommentText] = useState<string>("");
 
@@ -30,11 +30,11 @@ const Question: React.FC = () => {
     }, [paramQuestionId]);
 
     const fetchQuestion = async (id: string) => {
-        //get quesion
         const response = await fetch(`https://6665b6afd122c2868e418159.mockapi.io/test`);
         const data = await response.json();
         const question = data.find((q: { id: string }) => q.id === id);
         setQuestionTitle(question ? question.title : "Loading question...");
+        setQuestionDescription(question ? question.description : "Loading description...");
     };
 
     const fetchComments = async (questionId: string) => {
@@ -44,11 +44,16 @@ const Question: React.FC = () => {
     };
 
     const handleCommentSubmit = async () => {
-        if (newComment.trim() === "") return;
+        if (newComment.trim() === "" || newUser.trim() === "") {
+            alert("Comment or Name empty")
+            return;
+
+        }
+
 
         const newCommentObj = {
             comment: newComment,
-            name: "New User",
+            name: newUser,
             questionId: paramQuestionId,
             id: Date.now().toString(),
         };
@@ -62,6 +67,7 @@ const Question: React.FC = () => {
         });
 
         setNewComment("");
+        setNewUser("");
         fetchComments(paramQuestionId);
     };
 
@@ -87,50 +93,60 @@ const Question: React.FC = () => {
     };
 
     const handleDeleteComment = async (commentId: string) => {
+        const confirmed = window.confirm("Are you sure you want to delete this comment?");
+        if (!confirmed) return;
+
         await fetch(`${API_URL}/${commentId}`, {
             method: "DELETE",
         });
 
         fetchComments(paramQuestionId);
     };
-
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-gray-100">
             <Header />
-            <main className="flex-1 py-8 px-6">
-                <h1 className="text-2xl font-bold mb-4">Question</h1>
-                <div className="mb-6">
-                    <h2 className="text-xl font-semibold">Question Details</h2>
-                    <p>{questionTitle || "Loading question..."}</p>
+            <main className="flex-1 py-10 px-6 w-full">
+                <h1 className="text-4xl font-bold text-gray-800 mb-6">Question Details</h1>
+                <div className="bg-white p-8 rounded-lg shadow-lg mb-8 w-full">
+                    <h2 className="text-3xl font-semibold text-gray-700 mb-4">Question</h2>
+                    <p className="text-lg text-gray-800 mb-2">{questionTitle || "Loading question..."}</p>
+                    <p className="text-base text-gray-600">{questionDescription || "Loading description..."}</p>
                 </div>
-                <div className="mb-6">
-                    <h2 className="text-xl font-semibold">Comments</h2>
+                <div className="bg-white p-8 rounded-lg shadow-lg mb-8 w-full">
+                    <h2 className="text-3xl font-semibold text-gray-700 mb-4">Comments</h2>
                     <div className="space-y-4">
                         {comments.map((comment) => (
-                            <div key={comment.id} className="p-4 border rounded-md">
-                                <p className="text-lg font-bold">{comment.name}</p>
+                            <div key={comment.id} className="p-6 border rounded-lg shadow-sm bg-gray-50 w-full">
+                                <p className="text-lg font-semibold text-gray-900">{comment.name}</p>
                                 {editCommentId === comment.id ? (
                                     <>
                                         <Textarea
                                             value={editCommentText}
                                             onChange={(e) => setEditCommentText(e.target.value)}
                                             placeholder="Edit your comment"
-                                            rows={3}
-                                            className="mb-4"
+                                            rows={4}
+                                            className="mt-2 mb-4 border rounded-lg w-full"
                                         />
-                                        <Button onClick={handleUpdateComment} className="mr-2">Update</Button>
-                                        <Button onClick={() => setEditCommentId(null)}>Cancel</Button>
+                                        <div className="flex gap-4">
+                                            <Button onClick={handleUpdateComment} className="bg-blue-500 text-white">Update</Button>
+                                            <Button onClick={() => setEditCommentId(null)} className="bg-gray-300">Cancel</Button>
+                                        </div>
                                     </>
                                 ) : (
                                     <>
-                                        <p className="text-sm text-gray-600">{comment.comment}</p>
-                                        <div className="flex gap-2 mt-2">
-                                            <Button onClick={() => handleEditComment(comment)} variant="ghost">
+                                        <p className="text-base text-gray-700 mt-2">{comment.comment}</p>
+                                        <div className="flex gap-3 mt-3">
+                                            <Button
+                                                onClick={() => handleEditComment(comment)}
+                                                className="bg-gray-200 text-black px-3 py-1 rounded-md">
                                                 Edit
                                             </Button>
-                                            <Button onClick={() => handleDeleteComment(comment.id)} variant="ghost">
+                                            <Button
+                                                onClick={() => handleDeleteComment(comment.id)}
+                                                className="bg-gray-200 text-red-600 text-sm px-3 py-1 rounded-md">
                                                 Delete
                                             </Button>
+
                                         </div>
                                     </>
                                 )}
@@ -138,16 +154,23 @@ const Question: React.FC = () => {
                         ))}
                     </div>
                 </div>
-                <div>
-                    <h2 className="text-xl font-semibold">Add a Comment</h2>
+                <div className="bg-white p-8 rounded-lg shadow-lg w-full">
+                    <h2 className="text-3xl font-semibold text-gray-700 mb-4">Add a Comment</h2>
+                    <input
+                        type="text"
+                        value={newUser}
+                        onChange={(e) => setNewUser(e.target.value)}
+                        placeholder="Enter your name"
+                        className="mb-4 p-2 border rounded-lg w-full"
+                    />
                     <Textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Enter your comment"
-                        rows={3}
-                        className="mb-4"
+                        rows={4}
+                        className="mb-4 border rounded-lg w-full"
                     />
-                    <Button onClick={handleCommentSubmit}>Submit Comment</Button>
+                    <Button onClick={handleCommentSubmit} className="bg-blue-500 text-white">Submit Comment</Button>
                 </div>
             </main>
             <Footer />
