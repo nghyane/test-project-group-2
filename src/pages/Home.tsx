@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 import Header from "@/components/layout/Header"
@@ -62,7 +61,6 @@ const Home: React.FC = () => (
                                     <TableHeader>
                                         <TableRow>
                                             <TableHead>Title</TableHead>
-                                            <TableHead>Status</TableHead>
                                             <TableHead>Actions</TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -73,9 +71,7 @@ const Home: React.FC = () => (
                                                     How to set up a React project?
                                                 </Link>
                                             </TableCell>
-                                            <TableCell>
-                                                <Badge variant="secondary">Pending</Badge>
-                                            </TableCell>
+                                           
                                             <TableCell>
                                                 <div className="flex items-center gap-2">
                                                     <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
@@ -95,9 +91,7 @@ const Home: React.FC = () => (
                                                     What is the difference between useState and useEffect?
                                                 </Link>
                                             </TableCell>
-                                            <TableCell>
-                                                <Badge variant="secondary">Pending</Badge>
-                                            </TableCell>
+                                            
                                             <TableCell>
                                                 <div className="flex items-center gap-2">
                                                     <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
