@@ -178,8 +178,8 @@ const Home: React.FC = () => {
                                                     </div>
                                                 </TableCell>
                                             </TableRow>
-                                            {questions.map((question) => (
-                                                <React.Fragment key={question.id}>
+                                            {questions.map((q) => (
+                                                <React.Fragment key={q.id}>
                                                     <TableRow>
                                                         <TableCell>
                                                             <Link to={
