@@ -7,15 +7,28 @@ const useComments = (questionId) => {
     const [comments, setComments] = useState([]);
 
     const fetchComments = useCallback(async () => {
-        const response = await fetch(`${API_URL}?questionId=${questionId}`);
-        const data = await response.json();
-        setComments(data);
+        try {
+            const response = await fetch(`${API_URL}?questionId=${questionId}`);
+            const data = await response.json();
+            // checkk data is array
+            if (Array.isArray(data)) {
+                setComments(data);
+            } else {
+                console.error('Fetched data is not an array', data);
+                setComments([]);
+            }
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+            setComments([]);
+        }
     }, [questionId]);
+    
 
     useEffect(() => {
         fetchComments();
     }, [fetchComments]);
 
+    //add comment
     const addComment = async (newCommentObj) => {
         await fetch(API_URL, {
             method: "POST",
@@ -26,7 +39,7 @@ const useComments = (questionId) => {
         });
         fetchComments();
     };
-
+    //update comment
     const updateComment = async (commentId, editCommentText) => {
         await fetch(`${API_URL}/${commentId}`, {
             method: "PUT",
@@ -37,7 +50,7 @@ const useComments = (questionId) => {
         });
         fetchComments();
     };
-
+//delete comment
     const deleteComment = async (commentId) => {
         await fetch(`${API_URL}/${commentId}`, {
             method: "DELETE",

@@ -1,38 +1,56 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
-
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-
-import Header from "@/components/layout/Header"
-import Footer from "components/layout/Footer";
-
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import { useQuestions } from "@/hooks/useQuestions";
 
 const Home: React.FC = () => {
-    const defaultQuestions = {
+    const defaultQuestion = {
         title: "",
         description: "",
         username: "Anonymous"
-    }
-    
-    const [question, setQuestion] = React.useState(defaultQuestions);
+    };
+
+    const [question, setQuestion] = React.useState(defaultQuestion);
+    const [errors, setErrors] = React.useState({
+        title: "",
+        description: ""
+    });
+
+    const { questions, fetchQuestions, createQuestion, deleteQuestion } = useQuestions();
+
+    React.useEffect(() => {
+        fetchQuestions();
+    }, [fetchQuestions]);
 
     const handleSubmission = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        createQuestion({
-            ...question,
-        });
 
-        setQuestion(defaultQuestions);
-    }
+        const newErrors = {
+            title: question.title ? "" : "Title is required",
+            description: question.description ? "" : "Description is required"
+        };
+
+        if (newErrors.title || newErrors.description) {
+            setErrors(newErrors);
+            return;
+        }
+
+        createQuestion(question);
+        setQuestion(defaultQuestion);
+        setErrors({
+            title: "",
+            description: ""
+        });
+    };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setQuestion({
@@ -40,32 +58,6 @@ const Home: React.FC = () => {
             [event.target.name]: event.target.value
         });
     };
-
-
-
-    const questions = useQuestions(
-        (state) => state.questions
-    );
-
-    const fetchQuestions = useQuestions(
-        (state) => state.fetchQuestions
-    );
-
-    const createQuestion = useQuestions(
-        (state) => state.createQuestion
-    );
-
-    const deleteQuestion = useQuestions(
-        (state) => state.deleteQuestion
-    );
-
-
-    React.useEffect(() => {
-        fetchQuestions()
-
-    }, [fetchQuestions]);
-
-
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -90,11 +82,26 @@ const Home: React.FC = () => {
                                         <div className="space-y-2">
                                             <div>
                                                 <Label htmlFor="title">Title</Label>
-                                                <Input id="title" placeholder="Enter your question" defaultValue={question.title} onChange={handleChange} name="title" />
+                                                <Input
+                                                    id="title"
+                                                    placeholder="Enter your question"
+                                                    value={question.title}
+                                                    onChange={handleChange}
+                                                    name="title"
+                                                />
+                                                {errors.title && <p className="text-red-600">{errors.title}</p>}
                                             </div>
                                             <div>
                                                 <Label htmlFor="description">Description</Label>
-                                                <Textarea id="description" placeholder="Provide more details about your question" rows={3} defaultValue={question.description} onChange={handleChange} name="description" />
+                                                <Textarea
+                                                    id="description"
+                                                    placeholder="Provide more details about your question"
+                                                    rows={3}
+                                                    value={question.description}
+                                                    onChange={handleChange}
+                                                    name="description"
+                                                />
+                                                {errors.description && <p className="text-red-600">{errors.description}</p>}
                                             </div>
                                         </div>
                                         <Button type="submit" className="mt-4">
@@ -117,18 +124,13 @@ const Home: React.FC = () => {
                                         </TableHeader>
                                         <TableBody>
                                             {questions.map((q) => (
-                                                <React.Fragment key={q.id}>
-                                                    <TableRow>
-                                                        <TableCell>
-                                                            <Link to={
-                                                                `/q/${q.id}`
-                                                            } className="font-medium hover:underline">
-                                                                {q.title}
-                                                            </Link>
-                                                        </TableCell>
-
-                                                    </TableRow>
-                                                </React.Fragment>
+                                                <TableRow key={q.id}>
+                                                    <TableCell>
+                                                        <Link to={`/q/${q.id}`} className="font-medium hover:underline">
+                                                            {q.title}
+                                                        </Link>
+                                                    </TableCell>
+                                                </TableRow>
                                             ))}
                                         </TableBody>
                                     </Table>
@@ -154,44 +156,42 @@ const Home: React.FC = () => {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-
                                             {questions.map((q) => (
-                                                <React.Fragment key={q.id}>
-                                                    <TableRow>
-                                                        <TableCell>
-                                                            <Link to={
-                                                                `/q/${q.id}`
-                                                            } className="font-medium hover:underline">
-                                                                {q.title}
-                                                            </Link>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <div className="flex items-center gap-2">
-                                                                <Avatar className="w-6 h-6 border">
-                                                                    <AvatarImage src="https://avatar.iran.liara.run/public/1" alt="Image" />
-                                                                    <AvatarFallback>
-                                                                        <span>{q.username?.charAt(0).toUpperCase()}</span>
-                                                                    </AvatarFallback>
-                                                                </Avatar>
-                                                                <span>
-                                                                    {q.username || "Anonymous"}
-                                                                </span>
-                                                            </div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <div className="flex items-center gap-2">
-                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                                    <FilePenIcon className="w-4 h-4" />
-                                                                    <span className="sr-only">Answer</span>
-                                                                </Button>
-                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full" onClick={() => deleteQuestion(q.id)}>
-                                                                    <TrashIcon className="w-4 h-4" />
-                                                                    <span className="sr-only">Delete</span>
-                                                                </Button>
-                                                            </div>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </React.Fragment>
+                                                <TableRow key={q.id}>
+                                                    <TableCell>
+                                                        <Link to={`/q/${q.id}`} className="font-medium hover:underline">
+                                                            {q.title}
+                                                        </Link>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <div className="flex items-center gap-2">
+                                                            <Avatar className="w-6 h-6 border">
+                                                                <AvatarImage src="https://avatar.iran.liara.run/public/1" alt="Image" />
+                                                                <AvatarFallback>
+                                                                    <span>{q.username?.charAt(0).toUpperCase()}</span>
+                                                                </AvatarFallback>
+                                                            </Avatar>
+                                                            <span>{q.username || "Anonymous"}</span>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <div className="flex items-center gap-2">
+                                                            <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                                <FilePenIcon className="w-4 h-4" />
+                                                                <span className="sr-only">Answer</span>
+                                                            </Button>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="hover:bg-muted/50 rounded-full"
+                                                                onClick={() => deleteQuestion(q.id!)}
+                                                            >
+                                                                <TrashIcon className="w-4 h-4" />
+                                                                <span className="sr-only">Delete</span>
+                                                            </Button>
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
                                             ))}
                                         </TableBody>
                                     </Table>
@@ -203,10 +203,8 @@ const Home: React.FC = () => {
             </main>
             <Footer />
         </div>
-    )
-}
-
-
+    );
+};
 
 function FilePenIcon(props) {
     return (
@@ -226,9 +224,8 @@ function FilePenIcon(props) {
             <path d="M14 2v4a2 2 0 0 0 2 2h4" />
             <path d="M10.4 12.6a2 2 0 1 1 3 3L8 21l-4 1 1-4Z" />
         </svg>
-    )
+    );
 }
-
 
 function TrashIcon(props) {
     return (
@@ -248,7 +245,7 @@ function TrashIcon(props) {
             <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
             <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
         </svg>
-    )
+    );
 }
 
 export default Home;
