@@ -184,7 +184,12 @@ const Home: React.FC = () => {
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 className="hover:bg-muted/50 rounded-full"
-                                                                onClick={() => deleteQuestion(q.id!)}
+                                                                onClick={() => {
+                                                                    const confirmed = window.confirm("Are you sure you want to delete this question?");
+                                                                    if (confirmed) {
+                                                                        deleteQuestion(q.id!);
+                                                                    }
+                                                                }}
                                                             >
                                                                 <TrashIcon className="w-4 h-4" />
                                                                 <span className="sr-only">Delete</span>
