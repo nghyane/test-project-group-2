@@ -180,10 +180,12 @@ const Home: React.FC = () => {
                                                         </TableCell>
                                                         <TableCell>
                                                             <div className="flex items-center gap-2">
-                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
-                                                                    <FilePenIcon className="w-4 h-4" />
-                                                                    <span className="sr-only">Answer</span>
-                                                                </Button>
+                                                                <Link to={`/q/${q.id}`} >
+                                                                    <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full">
+                                                                        <FilePenIcon className="w-4 h-4" />
+                                                                        <span className="sr-only">Answer</span>
+                                                                    </Button>
+                                                                </Link>
                                                                 <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full" onClick={() =>
                                                                     window.confirm("Are you sure you want to delete this question?") && deleteQuestion(q.id)
                                                                 }>
