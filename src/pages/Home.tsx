@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -8,56 +9,48 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Footer from "components/layout/Footer";
+
 import { useQuestions } from "@/hooks/useQuestions";
 
 const Home: React.FC = () => {
-    const defaultQuestion = {
+    const defaultQuestions = {
         title: "",
         description: "",
-        username: "Anonymous"
+        username: "Anonymous",
     };
 
-    const [question, setQuestion] = React.useState(defaultQuestion);
-    const [errors, setErrors] = React.useState({
-        title: "",
-        description: ""
-    });
-
-    const { questions, fetchQuestions, createQuestion, deleteQuestion } = useQuestions();
-
-    React.useEffect(() => {
-        fetchQuestions();
-    }, [fetchQuestions]);
+    const [question, setQuestion] = React.useState(defaultQuestions);
 
     const handleSubmission = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        const newErrors = {
-            title: question.title ? "" : "Title is required",
-            description: question.description ? "" : "Description is required"
-        };
-
-        if (newErrors.title || newErrors.description) {
-            setErrors(newErrors);
-            return;
-        }
-
-        createQuestion(question);
-        setQuestion(defaultQuestion);
-        setErrors({
-            title: "",
-            description: ""
+        createQuestion({
+            ...question,
         });
+
+        setQuestion(defaultQuestions);
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setQuestion({
             ...question,
-            [event.target.name]: event.target.value
+            [event.target.name]: event.target.value,
         });
     };
+
+    const questions = useQuestions((state) => state.questions);
+
+    const fetchQuestions = useQuestions((state) => state.fetchQuestions);
+
+    const createQuestion = useQuestions((state) => state.createQuestion);
+
+    const deleteQuestion = useQuestions((state) => state.deleteQuestion);
+
+    React.useEffect(() => {
+        fetchQuestions();
+    }, [fetchQuestions]);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -85,11 +78,10 @@ const Home: React.FC = () => {
                                                 <Input
                                                     id="title"
                                                     placeholder="Enter your question"
-                                                    value={question.title}
+                                                    defaultValue={question.title}
                                                     onChange={handleChange}
                                                     name="title"
                                                 />
-                                                {errors.title && <p className="text-red-600">{errors.title}</p>}
                                             </div>
                                             <div>
                                                 <Label htmlFor="description">Description</Label>
@@ -97,11 +89,10 @@ const Home: React.FC = () => {
                                                     id="description"
                                                     placeholder="Provide more details about your question"
                                                     rows={3}
-                                                    value={question.description}
+                                                    defaultValue={question.description}
                                                     onChange={handleChange}
                                                     name="description"
                                                 />
-                                                {errors.description && <p className="text-red-600">{errors.description}</p>}
                                             </div>
                                         </div>
                                         <Button type="submit" className="mt-4">
@@ -124,13 +115,15 @@ const Home: React.FC = () => {
                                         </TableHeader>
                                         <TableBody>
                                             {questions.map((q) => (
-                                                <TableRow key={q.id}>
-                                                    <TableCell>
-                                                        <Link to={`/q/${q.id}`} className="font-medium hover:underline">
-                                                            {q.title}
-                                                        </Link>
-                                                    </TableCell>
-                                                </TableRow>
+                                                <React.Fragment key={q.id}>
+                                                    <TableRow>
+                                                        <TableCell>
+                                                            <Link to={`/q/${q.id}`} className="font-medium hover:underline">
+                                                                {q.title}
+                                                            </Link>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </React.Fragment>
                                             ))}
                                         </TableBody>
                                     </Table>
@@ -184,12 +177,7 @@ const Home: React.FC = () => {
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 className="hover:bg-muted/50 rounded-full"
-                                                                onClick={() => {
-                                                                    const confirmed = window.confirm("Are you sure you want to delete this question?");
-                                                                    if (confirmed) {
-                                                                        deleteQuestion(q.id!);
-                                                                    }
-                                                                }}
+                                                                onClick={() => deleteQuestion(q.id!)}
                                                             >
                                                                 <TrashIcon className="w-4 h-4" />
                                                                 <span className="sr-only">Delete</span>
@@ -211,7 +199,7 @@ const Home: React.FC = () => {
     );
 };
 
-function FilePenIcon(props) {
+function FilePenIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
             {...props}
@@ -232,7 +220,7 @@ function FilePenIcon(props) {
     );
 }
 
-function TrashIcon(props) {
+function TrashIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
             {...props}
