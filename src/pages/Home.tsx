@@ -22,7 +22,7 @@ const Home: React.FC = () => {
         description: "",
         username: "Anonymous"
     }
-    
+
     const [question, setQuestion] = React.useState(defaultQuestions);
 
     const handleSubmission = (event: React.FormEvent<HTMLFormElement>) => {
@@ -184,7 +184,9 @@ const Home: React.FC = () => {
                                                                     <FilePenIcon className="w-4 h-4" />
                                                                     <span className="sr-only">Answer</span>
                                                                 </Button>
-                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full" onClick={() => deleteQuestion(q.id)}>
+                                                                <Button variant="ghost" size="icon" className="hover:bg-muted/50 rounded-full" onClick={() =>
+                                                                    window.confirm("Are you sure you want to delete this question?") && deleteQuestion(q.id)
+                                                                }>
                                                                     <TrashIcon className="w-4 h-4" />
                                                                     <span className="sr-only">Delete</span>
                                                                 </Button>
