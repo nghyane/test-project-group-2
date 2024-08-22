@@ -155,7 +155,7 @@ const Home: React.FC = () => {
                                         </TableHeader>
                                         <TableBody>
 
-                                            {questions.map((q) => (
+                                            {questions.reverse().map((q) => (
                                                 <React.Fragment key={q.id}>
                                                     <TableRow>
                                                         <TableCell>
