@@ -61,10 +61,8 @@ const Question = () => {
         <div className="flex flex-col min-h-screen bg-gray-100">
             <Header />
             <main className="flex-1 py-10 px-6 w-full">
-                <h1 className="text-4xl font-bold text-gray-800 mb-6">Question Details</h1>
                 <div className="bg-white p-8 rounded-lg shadow-lg mb-8 w-full">
-                    <h2 className="text-3xl font-semibold text-gray-700 mb-4">Question</h2>
-                    <p className="text-lg text-gray-800 mb-2">{questionTitle || "Loading question..."}</p>
+                    <h1 className="text-3xl font-semibold text-gray-700 mb-4">{questionTitle || "Loading question..."}</h1>
                     <p className="text-base text-gray-600">{questionDescription || "Loading description..."}</p>
                 </div>
                 <div className="bg-white p-8 rounded-lg shadow-lg mb-8 w-full">

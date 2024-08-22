@@ -141,7 +141,7 @@ const Home: React.FC = () => {
                         <div className="grid gap-4">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Unanswered Questions</CardTitle>
+                                    <CardTitle>Manage Questions</CardTitle>
                                     <CardDescription>Review and respond to questions from interns.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
@@ -155,7 +155,7 @@ const Home: React.FC = () => {
                                         </TableHeader>
                                         <TableBody>
 
-                                            {questions.reverse().map((q) => (
+                                            {questions.map((q) => (
                                                 <React.Fragment key={q.id}>
                                                     <TableRow>
                                                         <TableCell>

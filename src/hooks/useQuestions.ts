@@ -18,9 +18,9 @@ export const useQuestions = create<State>((set) => ({
     questions: [],
     fetchQuestions: async () => {
         try {
-            const response = await fetch('https://6665b6afd122c2868e418159.mockapi.io/question');
+            const response = await fetch('https://6665b6afd122c2868e418159.mockapi.io/question?order=desc&sortBy=id');
             const questions = await response.json();
-            console.log('Fetched Questions:', questions); // Debug log
+
             set({ questions });
         } catch (error) {
             console.error('Error fetching questions:', error);
@@ -36,7 +36,7 @@ export const useQuestions = create<State>((set) => ({
                 body: JSON.stringify(question),
             });
             const newQuestion = await response.json();
-            console.log('Created Question:', newQuestion); // Debug log
+
             set((state) => ({
                 questions: [...state.questions, newQuestion],
             }));
@@ -49,7 +49,7 @@ export const useQuestions = create<State>((set) => ({
             await fetch(`https://6665b6afd122c2868e418159.mockapi.io/question/${id}`, {
                 method: 'DELETE',
             });
-            console.log('Deleted Question ID:', id); // Debug log
+
             set((state) => ({
                 questions: state.questions.filter((question) => question.id !== id),
             }));
